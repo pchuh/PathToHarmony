@@ -9,22 +9,55 @@ namespace Gameplay {
 	public class Tile : MonoBehaviour, IBattlefieldItem {
 		private Material originalMaterial;
 
-		[SerializeField]
-		private TileType initialType;
+		public TileType initialType;
 		public TileType tileType { get; set; }
-
+		public static GameObject[][] tileFlavor;
+		public TileEffects tileEffects;
 		public Tile() : this(TileType.None) { }
 
 		public Tile(TileType tileType) {
 			this.tileType = tileType;
 		}
 
-		void Start() {
-			animate();
+		void Awake() {
+
+			GameObject smallRock = Resources.Load<GameObject>("TileFlavor/" + "SmallRock");
+			GameObject smallTree = Resources.Load<GameObject>("TileFlavor/" + "SmallTree");
+			GameObject bush = Resources.Load<GameObject>("TileFlavor/" + "Bush");
+			GameObject pieceOfHeaven = Resources.Load<GameObject>("TileFlavor/" + "PieceOfHeaven");
+
+
+			if (Tile.tileFlavor == null) {
+				GameObject[][] _tileFlavor = new GameObject[][] {
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {smallRock, smallTree, bush},
+					new GameObject[] {smallTree, bush},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {bush},
+					new GameObject[] {bush},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {},
+					new GameObject[] {smallRock, pieceOfHeaven}
+				};
+
+				Tile.tileFlavor = _tileFlavor;
+			}
 		}
 
-		private void animate() {
-			//TODO use blender animations for flowing water and whatnot.
+		public GameObject[] getFlavorPrefabs() {
+			return Tile.tileFlavor[(int)(tileType)];
 		}
 
 		public void vibrateUnhappily() {
@@ -38,5 +71,6 @@ namespace Gameplay {
 		public override string ToString() {
 			return tileType.ToString();
 		}
+
 	}
 }
